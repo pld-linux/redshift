@@ -16,11 +16,11 @@ BuildRequires:	GConf2-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	geoclue-devel
 BuildRequires:	gettext-devel
+BuildRequires:	pkgconfig
 BuildRequires:	sed >= 4.0
 BuildRequires:	python
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
-BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
