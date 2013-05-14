@@ -16,6 +16,7 @@ BuildRequires:	GConf2-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	geoclue-devel
 BuildRequires:	gettext-devel
+BuildRequires:	sed >= 4.0
 BuildRequires:	python
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
@@ -50,6 +51,8 @@ temperature adjustment program.
 %setup -q
 %patch0 -p1
 %patch1 -p0
+
+%{__sed} -i -e '1s,^#!.*python,#!%{__python},' src/gtk-redshift/gtk-redshift
 
 %build
 %configure \
