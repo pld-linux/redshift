@@ -1,0 +1,14 @@
+diff -ur redshift-1.7/src/location-geoclue.c redshift-1.7_geoclue_provider/src/location-geoclue.c
+--- redshift-1.7/src/location-geoclue.c	2011-03-27 23:13:10.000000000 +0100
++++ redshift-1.7_geoclue_provider/src/location-geoclue.c	2011-07-09 13:41:17.940812241 +0100
+@@ -32,8 +32,8 @@
+ # define _(s) s
+ #endif
+ 
+-#define DEFAULT_PROVIDER "org.freedesktop.Geoclue.Providers.UbuntuGeoIP"
+-#define DEFAULT_PROVIDER_PATH "/org/freedesktop/Geoclue/Providers/UbuntuGeoIP"
++#define DEFAULT_PROVIDER "org.freedesktop.Geoclue.Providers.Hostip"
++#define DEFAULT_PROVIDER_PATH "/org/freedesktop/Geoclue/Providers/Hostip"
+ 
+ int
+ location_geoclue_init(location_geoclue_state_t *state)
