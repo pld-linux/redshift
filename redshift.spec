@@ -14,7 +14,7 @@ URL:		http://jonls.dk/redshift/
 BuildRequires:	GConf2-devel
 BuildRequires:	desktop-file-utils
 BuildRequires:	geoclue-devel
-BuildRequires:	gettext-devel
+BuildRequires:	gettext-tools
 BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 3.2
 BuildRequires:	rpm-pythonprov
