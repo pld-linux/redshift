@@ -1,28 +1,32 @@
 Summary:	Adjusts the color temperature of your screen according to time of day
 Name:		redshift
-Version:	1.9.1
+Version:	1.10
 Release:	1
 License:	GPL v3+
 Group:		Applications/System
-Source0:	http://launchpad.net/redshift/trunk/%{version}/+download/%{name}-%{version}.tar.xz
-# Source0-md5:	4c5dd6ea043116f9c15a9d5ec4c608de
+Source0:	http://launchpad.net/redshift/trunk/v%{version}/+download/%{name}-%{version}.tar.xz
+# Source0-md5:	3a5480b8dd5d28a877a0cb407619fd76
 # Remove Ubuntu specific geoclue provider
 Patch0:		%{name}-geoclue-provider.patch
 # https://bugs.launchpad.net/redshift/+bug/888661
 # http://bazaar.launchpad.net/~jonls/redshift/trunk/revision/165
 URL:		http://jonls.dk/redshift/
 BuildRequires:	GConf2-devel
+BuildRequires:	autoconf >= 2.69
+BuildRequires:	automake
 BuildRequires:	desktop-file-utils
 BuildRequires:	geoclue-devel
-BuildRequires:	gettext-tools
+BuildRequires:	gettext-tools >= 0.17
+BuildRequires:	glib2-devel >= 1:2.26
+BuildRequires:	intltool >= 0.50
+BuildRequires:	libdrm-devel
+BuildRequires:	libxcb-devel
 BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 3.2
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libXxf86vm-devel
-Requires:	python3 >= 3.2
-Requires:	python3-pyxdg
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -41,8 +45,9 @@ This package provides the base program.
 Summary:	GTK integration for Redshift
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
-Requires:	python-pygtk-gtk
-Requires:	python-pyxdg
+Requires:	gtk+3
+Requires:	python3 >= 3.2
+Requires:	python3-pyxdg
 Obsoletes:	gtk-redshift
 
 %description -n %{name}-gtk
@@ -56,8 +61,20 @@ temperature adjustment program.
 %{__sed} -i -e '1s,^#!.*python,#!%{__python},' src/redshift-gtk/redshift-gtk.in
 
 %build
+%{__gettextize}
+%{__intltoolize}
+%{__aclocal} -I m4
+%{__autoheader}
+%{__automake}
+%{__autoconf}
 %configure \
-	--disable-silent-rules
+	--disable-silent-rules \
+	--enable-drm \
+	--enable-geoclue \
+	--enable-geoclue2 \
+	--enable-gui \
+	--enable-randr \
+	--enable-vidmode
 %{__make}
 
 %install
@@ -89,6 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n %{name}-gtk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/redshift-gtk
+%{_datadir}/appdata/redshift-gtk.appdata.xml
 %{py3_sitescriptdir}/redshift_gtk
 %{_iconsdir}/hicolor/scalable/apps/redshift*.svg
 %{_desktopdir}/redshift-gtk.desktop
