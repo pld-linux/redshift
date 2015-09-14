@@ -1,7 +1,7 @@
 Summary:	Adjusts the color temperature of your screen according to time of day
 Name:		redshift
 Version:	1.10
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		Applications/System
 Source0:	http://launchpad.net/redshift/trunk/v%{version}/+download/%{name}-%{version}.tar.xz
