@@ -1,11 +1,11 @@
 Summary:	Adjusts the color temperature of your screen according to time of day
 Name:		redshift
-Version:	1.10
-Release:	2
+Version:	1.11
+Release:	1
 License:	GPL v3+
 Group:		Applications/System
-Source0:	http://launchpad.net/redshift/trunk/v%{version}/+download/%{name}-%{version}.tar.xz
-# Source0-md5:	3a5480b8dd5d28a877a0cb407619fd76
+Source0:	https://github.com/jonls/redshift/releases/download/v%{version}/%{name}-%{version}.tar.xz
+# Source0-md5:	a31d768b0348c5202e58612855a9027e
 # Remove Ubuntu specific geoclue provider
 Patch0:		%{name}-geoclue-provider.patch
 # https://bugs.launchpad.net/redshift/+bug/888661
@@ -58,7 +58,7 @@ temperature adjustment program.
 %setup -q
 %patch0 -p1
 
-%{__sed} -i -e '1s,^#!.*python,#!%{__python},' src/redshift-gtk/redshift-gtk.in
+%{__sed} -i -e '1s,^#!.*python3,#!%{__python3},' src/redshift-gtk/redshift-gtk.in
 
 %build
 %{__gettextize}
@@ -68,6 +68,7 @@ temperature adjustment program.
 %{__automake}
 %{__autoconf}
 %configure \
+	am_cv_python_pythondir=%{py3_sitescriptdir} \
 	--disable-silent-rules \
 	--enable-drm \
 	--enable-geoclue \
@@ -99,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc DESIGN HACKING NEWS README README-colorramp
+%doc DESIGN HACKING NEWS README README-colorramp redshift.conf.sample
 %attr(755,root,root) %{_bindir}/redshift
 %{_mandir}/man1/redshift.1*
 
@@ -109,6 +110,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/appdata/redshift-gtk.appdata.xml
 %{py3_sitescriptdir}/redshift_gtk
 %{_iconsdir}/hicolor/scalable/apps/redshift*.svg
+%{_desktopdir}/redshift.desktop
 %{_desktopdir}/redshift-gtk.desktop
 %{systemduserunitdir}/redshift.service
 %{systemduserunitdir}/redshift-gtk.service
