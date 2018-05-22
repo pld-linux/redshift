@@ -1,31 +1,27 @@
 Summary:	Adjusts the color temperature of your screen according to time of day
 Name:		redshift
-Version:	1.11
-Release:	2
+Version:	1.12
+Release:	1
 License:	GPL v3+
 Group:		Applications/System
 Source0:	https://github.com/jonls/redshift/releases/download/v%{version}/%{name}-%{version}.tar.xz
-# Source0-md5:	a31d768b0348c5202e58612855a9027e
-# Remove Ubuntu specific geoclue provider
-Patch0:		%{name}-geoclue-provider.patch
-# https://bugs.launchpad.net/redshift/+bug/888661
-# http://bazaar.launchpad.net/~jonls/redshift/trunk/revision/165
+# Source0-md5:	5d04f2413dacdf3434cb86f373842462
 URL:		http://jonls.dk/redshift/
-BuildRequires:	GConf2-devel
 BuildRequires:	autoconf >= 2.69
 BuildRequires:	automake
 BuildRequires:	desktop-file-utils
-BuildRequires:	geoclue-devel
 BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	glib2-devel >= 1:2.26
 BuildRequires:	intltool >= 0.50
 BuildRequires:	libdrm-devel
+BuildRequires:	libtool
 BuildRequires:	libxcb-devel
 BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 3.2
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	sed >= 4.0
+BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -56,7 +52,6 @@ temperature adjustment program.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %{__sed} -i -e '1s,^#!.*python3,#!%{__python3},' src/redshift-gtk/redshift-gtk.in
 
@@ -75,7 +70,8 @@ temperature adjustment program.
 	--enable-geoclue2 \
 	--enable-gui \
 	--enable-randr \
-	--enable-vidmode
+	--enable-vidmode \
+	--with-systemduserunitdir=%{systemduserunitdir}
 %{__make}
 
 %install
@@ -100,7 +96,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc DESIGN HACKING NEWS README README-colorramp redshift.conf.sample
+%doc CONTRIBUTING.md DESIGN NEWS README README-colorramp redshift.conf.sample
 %attr(755,root,root) %{_bindir}/redshift
 %{_mandir}/man1/redshift.1*
 
