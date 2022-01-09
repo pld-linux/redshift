@@ -1,7 +1,7 @@
 Summary:	Adjusts the color temperature of your screen according to time of day
 Name:		redshift
 Version:	1.12
-Release:	5
+Release:	6
 License:	GPL v3+
 Group:		Applications/System
 Source0:	https://github.com/jonls/redshift/releases/download/v%{version}/%{name}-%{version}.tar.xz
@@ -19,10 +19,12 @@ BuildRequires:	libxcb-devel
 BuildRequires:	pkgconfig
 BuildRequires:	python3 >= 3.2
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 2.011
 BuildRequires:	sed >= 4.0
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
+Requires(post,preun):	systemd-units >= 1:250.1
+Requires:	systemd-units >= 1:250.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -37,7 +39,7 @@ from night to daytime temperature to allow your eyes to slowly adapt.
 
 This package provides the base program.
 
-%package -n %{name}-gtk
+%package gtk
 Summary:	GTK integration for Redshift
 Group:		Applications/System
 Requires:	%{name} = %{version}-%{release}
@@ -46,7 +48,7 @@ Requires:	python3 >= 3.2
 Requires:	python3-pyxdg
 Obsoletes:	gtk-redshift
 
-%description -n %{name}-gtk
+%description gtk
 This package provides GTK integration for Redshift, a screen color
 temperature adjustment program.
 
@@ -88,10 +90,14 @@ desktop-file-validate $RPM_BUILD_ROOT%{_desktopdir}/redshift-gtk.desktop
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -n %{name}-gtk
+%post gtk
 %update_icon_cache hicolor
+%systemd_user_post redshift-gtk.service
 
-%postun -n %{name}-gtk
+%preun gtk
+%systemd_user_preun redshift-gtk.service
+
+%postun gtk
 %update_icon_cache hicolor
 
 %files -f %{name}.lang
@@ -100,7 +106,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/redshift
 %{_mandir}/man1/redshift.1*
 
-%files -n %{name}-gtk
+%files gtk
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/redshift-gtk
 %{_datadir}/appdata/redshift-gtk.appdata.xml
